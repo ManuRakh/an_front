@@ -7,6 +7,8 @@ import LoginForm from './components/LoginForm';
 import Dashboard from './components/Dashboard';
 import Contacts from './components/Contacts'; // Импорт нового компонента
 import About from "./components/About";
+import CreateRequestForm from "./components/CreateRequestForm";
+
 import './css/App.css';
 
 function App() {
@@ -51,6 +53,8 @@ function App() {
           />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/about" element={<About />} /> {/* Добавление маршрута для страницы "about" */}
+          <Route path="/create-request" element={<CreateRequestForm />} /> {/* Добавление маршрута для страницы "about" */}
+          
         </Routes>
         <Footer />
       </div>
