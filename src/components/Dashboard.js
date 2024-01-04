@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/Dashboard.css';
 import WorkerList from "./WorkerList.js";
+import { sendRequest } from '../utils/sendRequest.js';
 
 function Dashboard() {
   const [worker, setWorker] = useState({ spec: '', name: '', surname: '' });
@@ -24,8 +25,9 @@ function Dashboard() {
           }
         };
 
-        const response = await axios.request(config);
-        setWorkers(response.data.data.result);
+        const response = await sendRequest(config);
+
+        setWorkers(response);
       } catch (error) {
         console.error('Ошибка при получении данных о сотрудниках', error);
       }
@@ -37,7 +39,7 @@ function Dashboard() {
   const handleDeleteWorker = async (workerId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.request({
+      await sendRequest({
         method: 'delete',
         url: `http://localhost:3000/workers/${workerId}`,
         headers: { 
@@ -68,8 +70,7 @@ function Dashboard() {
         data: worker
       };
 
-      const response = await axios.request(config);
-      const foundWorker = response.data?.data?.result;
+      const foundWorker = await sendRequest(config);
       console.log({workers, foundWorker})
       if (foundWorker) setWorkers(currentWorkers => [...currentWorkers, foundWorker]);
 
