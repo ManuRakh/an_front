@@ -21,12 +21,13 @@ function App() {
 
   const handleLoginSuccess = (data) => {
     if (data && data.token) {
-      localStorage.setItem('token', data.token); // Сохраняем токен в localStorage
+      localStorage.setItem('token', data.token);
       setIsAuthenticated(true);
     } else {
       console.error('Токен не был получен');
     }
   };
+
 
   return (
     <Router>
@@ -43,7 +44,7 @@ function App() {
               )
             }
           />
-          <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />} />
+          <Route path="/dashboard" element={isAuthenticated ? <Dashboard onSetIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/" />} />
           <Route
             path="/login"
             element={<LoginForm onLoginSuccess={handleLoginSuccess} />}
@@ -55,6 +56,7 @@ function App() {
       </div>
     </Router>
   );
+
 }
 
 export default App;

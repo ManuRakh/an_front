@@ -4,7 +4,7 @@ import '../css/Dashboard.css';
 import WorkerList from "./WorkerList.js";
 import { sendRequest } from '../utils/sendRequest.js';
 
-function Dashboard() {
+function Dashboard({ onSetIsAuthenticated }) {
   const [worker, setWorker] = useState({ spec: '', name: '', surname: '' });
   const [workers, setWorkers] = useState([]);
 
@@ -18,7 +18,7 @@ function Dashboard() {
         const token = localStorage.getItem('token');
         const config = {
           method: 'get',
-          url: 'http://localhost:3000/workers',
+          url: 'http://localhost:3002/workers',
           headers: { 
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -30,6 +30,8 @@ function Dashboard() {
         setWorkers(response);
       } catch (error) {
         console.error('Ошибка при получении данных о сотрудниках', error);
+        const errMsg = error.response.data.error;
+        if (errMsg === "Not authenticated") onSetIsAuthenticated(false)
       }
     };
 
@@ -41,7 +43,7 @@ function Dashboard() {
       const token = localStorage.getItem('token');
       await sendRequest({
         method: 'delete',
-        url: `http://localhost:3000/workers/${workerId}`,
+        url: `http://localhost:3002/workers/${workerId}`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -62,7 +64,7 @@ function Dashboard() {
       const token = localStorage.getItem('token');
       const config = {
         method: 'post',
-        url: 'http://localhost:3000/workers',
+        url: 'http://localhost:3002/workers',
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
