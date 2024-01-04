@@ -1,0 +1,67 @@
+.dashboard-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .dashboard-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .worker-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .worker-item {
+    background-color: #f3f3f3;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .worker-item button {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .worker-item button:hover {
+    background-color: #ff7875;
+  }
+  
+  .create-worker-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .create-worker-form input,
+  .create-worker-form button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .create-worker-form button {
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .create-worker-form button:hover {
+    background-color: #40a9ff;
+  }
+  
