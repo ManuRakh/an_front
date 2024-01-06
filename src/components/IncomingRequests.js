@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { sendRequest } from '../utils/sendRequest';
 import "../css/IncomingRequests.css";
+import generateWorkersPromises from './utils/getWorkers';
 function IncomingRequests() {
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
@@ -22,27 +23,9 @@ function IncomingRequests() {
           };
   
           const response = await sendRequest(config);
-  
-          const workerIds = response.map((request) => request.worker_id);
-  
+    
           // Запрос для получения данных о сотрудниках на основе worker_id
-          const workersPromises = workerIds.map(async (workerId) => {
-            const workerConfig = {
-              method: 'get',
-              url: `http://localhost:3002/workers/${workerId}`,
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            };
-  
-            const workerResponse = await sendRequest(workerConfig);
-  
-            return {
-              ...workerResponse,
-              workerId,
-            };
-          });
+          const workersPromises = generateWorkersPromises(response, token, true);
   
           const workersData = await Promise.all(workersPromises);
           console.log({workersData})

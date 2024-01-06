@@ -66,6 +66,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
               const response = await sendRequest(config);
     
               setWorkers(response);
+              setSelectedWorker(response[0]?.id || "");
             } catch (error) {
               console.error('Ошибка при получении данных о сотрудниках', error);
               const errMsg = error.response?.data?.error;

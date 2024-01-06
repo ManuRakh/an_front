@@ -7,6 +7,7 @@ import { sendRequest } from '../utils/sendRequest.js';
 function Dashboard({ onSetIsAuthenticated }) {
   const [worker, setWorker] = useState({ spec: '', name: '', surname: '' });
   const [workers, setWorkers] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const handleChange = (e) => {
     setWorker({ ...worker, [e.target.name]: e.target.value });
@@ -34,16 +35,35 @@ function Dashboard({ onSetIsAuthenticated }) {
         if (errMsg === "Not authenticated") onSetIsAuthenticated(false)
       }
     };
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const config = {
+          method: 'get',
+          url: 'http://localhost:3002/users',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        };
+        const response = await sendRequest(config);
+        setUsers(response);
+      } catch (error) {
+        console.error('Ошибка при получении данных о пользователях', error);
+      }
+    };
 
     fetchWorkers();
+    fetchUsers();
   }, []);
 
   const handleDeleteWorker = async (workerId) => {
     try {
       const token = localStorage.getItem('token');
+      const currentAcademy = localStorage.getItem('academy');
       await sendRequest({
         method: 'delete',
-        url: `http://localhost:3002/workers/${workerId}`,
+        url: `http://localhost:3002/workers/${workerId}?selected_academy=${currentAcademy}`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -90,6 +110,17 @@ function Dashboard({ onSetIsAuthenticated }) {
           <input type="text" name="spec" value={worker.spec} onChange={handleChange} placeholder="Должность" />
           <input type="text" name="name" value={worker.name} onChange={handleChange} placeholder="Имя" />
           <input type="text" name="surname" value={worker.surname} onChange={handleChange} placeholder="Фамилия" />
+          <select 
+            name="user_id" 
+            value={worker.user_id} 
+            onChange={handleChange} 
+            required
+          >
+            <option value="">Выберите пользователя</option>
+            {users.map(user => (
+              <option key={user.id} value={user.id}>{user.name} {user.surname}</option>
+            ))}
+          </select>
           <button type="submit">Создать Сотрудника</button>
         </form>
       </div>

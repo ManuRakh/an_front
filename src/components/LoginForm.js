@@ -22,6 +22,12 @@ function LoginForm({ onLoginSuccess }) {
     }
   };
 
+  const handleAcademyChange = (e) => {
+    const selectedAcademy = e.target.value;
+    setAcademy(selectedAcademy);
+    localStorage.setItem('academy', selectedAcademy);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <input
@@ -39,8 +45,8 @@ function LoginForm({ onLoginSuccess }) {
         required
       />
       <select
-        value={academy}
-        onChange={(e) => setAcademy(e.target.value)}
+  value={academy}
+  onChange={handleAcademyChange}
         required
       >
         <option value="physics">Академия Физики</option>

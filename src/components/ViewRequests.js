@@ -3,6 +3,7 @@ import axios from 'axios';
 import { sendRequest } from '../utils/sendRequest';
 import React, { useState, useEffect } from 'react';
 import "../css/IncomingRequests.css";
+import generateWorkersPromises from "./utils/getWorkers";
 function ViewRequests() {
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
@@ -13,9 +14,10 @@ function ViewRequests() {
       const fetchIncomingRequests = async () => {
         try {
           const token = localStorage.getItem('token');
+          const selectedAcademy = localStorage.getItem('academy');
           const config = {
             method: 'get',
-            url: 'http://localhost:3002/requests/outcoming/requests',
+            url: `http://localhost:3002/requests/outcoming/requests?selected_academy=${selectedAcademy}`,
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -24,29 +26,11 @@ function ViewRequests() {
   
           const response = await sendRequest(config);
   
-          const workerIds = response.map((request) => request.worker_id);
-  
           // Запрос для получения данных о сотрудниках на основе worker_id
-          const workersPromises = workerIds.map(async (workerId) => {
-            const workerConfig = {
-              method: 'get',
-              url: `http://localhost:3002/workers/${workerId}`,
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            };
-  
-            const workerResponse = await sendRequest(workerConfig);
-  
-            return {
-              ...workerResponse,
-              workerId,
-            };
-          });
+          const workersPromises = generateWorkersPromises(response, token, false)
   
           const workersData = await Promise.all(workersPromises);
-          console.log({workersData})
+
           const updatedRequests = response.map((request) => {
             console.log(request, workersData)
             const matchingWorker = workersData.find((worker) => worker.id === request.worker_id);
@@ -70,6 +54,7 @@ function ViewRequests() {
     const handleUpdateStatus = async (requestId, newStatus, selectedAcademy) => {
         try {
           const token = localStorage.getItem('token');
+          
           const config = {
             method: 'patch',
             url: `http://localhost:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
@@ -111,7 +96,7 @@ function ViewRequests() {
   <ul>
     {incomingRequests.map((request) => (
       <li key={request.id} className="incoming-requests-item">
-        <strong>Академия Отправившая запрос:</strong> {request.sender_academy} | <strong>Исполнитель:</strong> {request.workerData.name} {request.workerData.surname} | <strong>Описание:</strong> {request.description} | <strong>Статус:</strong> {request.status === "scheduled" ? "Запрошено" : request.status }
+        <strong>Академия Отправившая запрос:</strong> {request.sender_academy} | <strong>Исполнитель:</strong> {request.workerData?.name || ""} {request.workerData.surname} | <strong>Описание:</strong> {request.description} | <strong>Статус:</strong> {request.status === "scheduled" ? "Запрошено" : request.status }
         <select onChange={(e) => setNewStatus(e.target.value)} value={newStatus} className="status-select">
 
           {statusOptions.map((option) => (
