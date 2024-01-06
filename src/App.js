@@ -11,6 +11,7 @@ import CreateRequestForm from "./components/CreateRequestForm";
 import IncomingRequests from "./components/IncomingRequests";
 import ViewRequests from "./components/ViewRequests";
 import './css/App.css';
+import RequestDetail from './components/RequestDetail';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -57,8 +58,7 @@ function App() {
           <Route path="/create-request" element={<CreateRequestForm />} /> {/* Добавление маршрута для страницы "about" */}
           <Route path="/incoming-requests" element={<IncomingRequests />} /> {/* Добавляем новый маршрут */}
           <Route path="/view-requests" element={<ViewRequests />} /> {/* Добавляем новый маршрут */}
-
-          
+          <Route path="/incoming-requests/:requestId" element={<RequestDetail/>} />          
         </Routes>
         <Footer />
       </div>

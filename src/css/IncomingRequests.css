@@ -1,61 +1,160 @@
 /* IncomingRequests.css */
 .incoming-requests-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 8px;
-    background: #f7f7f7;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  max-width: 2200px; /* Увеличенная максимальная ширина */
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background: #f7f7f7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: block;
+  flex-direction: column;
+}
+
+.incoming-requests-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.incoming-requests-container p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.requests-columns {
+  display: flex;
+  flex-wrap: wrap; /* Добавляем wrap для адаптивности */
+  justify-content: space-between;
+  gap: 20px; /* Отступы между колонками */
+}
+
+.request-column {
+  flex: 1;
+  min-width: 250px; /* Минимальная ширина колонки, чтобы избежать слишком узких колонок */
+  margin: 0 10px;
+  background: #fff; /* Фон для колонок */
+  border-radius: 8px; /* Скругление углов колонок */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для колонок */
+}
+
+.request-column button {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease; /* Анимация при наведении */
+}
+.request-column button:hover {
+  background-color: #40a9ff;
+}
+.open-request-button {
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease; /* Анимация при наведении */
+}
+
+/* При наведении на кнопку "Открыть карточку заявки" меняем цвет фона и добавляем небольшую тень */
+.open-request-button:hover {
+  background-color: #4cae4c;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.request-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.incoming-requests-item {
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #f3f3f3;
+  text-align: left;
+  word-wrap: break-word; /* Переносит длинные слова на новую строку */
+  overflow-wrap: break-word; /* Гарантирует, что все слова будут в пределах контейнера */
+}
+
+.incoming-requests-item select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.incoming-requests-item button {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.incoming-requests-item button:hover {
+  background-color: #40a9ff;
+}
+
+.status-select {
+  margin: 10px;
+  width: auto; /* Можно убрать, если хотите, чтобы select занимал всю ширину */
+}
+
+.update-status-button {
+  background-color: #5cb85c;
+  color: white;
+  padding: 5px 15px;
+  border: none;
+  cursor: pointer;
+  display: block;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .requests-columns {
+      flex-direction: column;
   }
-  
-  .incoming-requests-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
+
+  .request-column {
+      margin: 0; /* Убираем отступы по бокам для мобильных устройств */
+      width: 100%; /* Колонки на всю ширину экрана */
+      margin-bottom: 20px; /* Отступы между колонками */
   }
-  
-  .incoming-requests-container p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin: 10px 0;
-  }
-  
-  .incoming-requests-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .incoming-requests-item {
-    background-color: #f3f3f3;
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .incoming-requests-item select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .incoming-requests-item button {
-    background-color: #1890ff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  
-  .incoming-requests-item button:hover {
-    background-color: #40a9ff;
-  }
-  
+}
+
+
+.incoming-requests-item strong {
+  display: block; /* Заставляет заголовки отображаться на отдельной строке */
+  margin-bottom: 5px; /* Добавляем небольшой отступ снизу для визуального разделения */
+}
+
+/* Стиль для обертки информации о заявке */
+.request-info {
+  margin-bottom: 15px; /* Отступ снизу для разделения от выпадающего списка и кнопки */
+  text-overflow: ellipsis; /* Добавляет многоточие, если текст не помещается */
+  overflow: auto; /* Добавляет прокрутку, если текст не помещается */
+  white-space: pre-wrap; /* Сохраняет пробелы и разрывы строк */
+
+}
+
+/* Стилизация выпадающего списка и кнопки обновления статуса */
+.status-select,
+.update-status-button {
+  width: calc(100% - 20px); /* Занимает всю ширину, за вычетом паддингов */
+  margin-bottom: 10px; /* Отступ снизу между элементами формы */
+}

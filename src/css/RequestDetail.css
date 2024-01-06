@@ -1,0 +1,66 @@
+/* RequestDetail.css */
+.incoming-requests-container-details {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background: #f7f7f7;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .incoming-requests-container-details h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .incoming-requests-container-details strong {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  
+  .incoming-requests-container-details p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 10px 0;
+  }
+  
+  /* Стиль для информации о заявке */
+  .request-info {
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #f3f3f3;
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Стиль для выпадающего списка */
+  .status-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Стиль для кнопки обновления статуса */
+  .update-status-button {
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .update-status-button:hover {
+    background-color: #40a9ff;
+  }
+  

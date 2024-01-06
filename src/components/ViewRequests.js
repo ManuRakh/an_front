@@ -4,12 +4,16 @@ import { sendRequest } from '../utils/sendRequest';
 import React, { useState, useEffect } from 'react';
 import "../css/IncomingRequests.css";
 import generateWorkersPromises from "./utils/getWorkers";
+import updateRequestStatus from "./utils/updateRequestStatus";
+import { Link } from 'react-router-dom'; // Импортируйте Link из react-router-dom
+import { convertStatusToEn, convertStatusToRu } from "./utils/convertStatusToEn";
+
 function ViewRequests() {
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
-    const [newStatus, setNewStatus] = useState('processing');
-    const [statusOptions] = useState(['scheduled', 'processing', 'review', 'approved']);
-  
+    const [groupedRequests, setGroupedRequests] = useState({});
+    const [statusOptions] = useState(['Отправлено', 'В процессе', 'На проверке', 'Подтверждено']);
+
     useEffect(() => {
       const fetchIncomingRequests = async () => {
         try {
@@ -42,6 +46,12 @@ function ViewRequests() {
           });
   
           setIncomingRequests(updatedRequests);
+          const newGroupedRequests = statusOptions.reduce((acc, status) => {
+            acc[status] = updatedRequests.filter(request => request.status === convertStatusToEn(status));
+            return acc;
+          }, {});
+          setGroupedRequests(newGroupedRequests);
+
         } catch (error) {
           console.error('Ошибка при получении присланных заявок', error);
           const errMsg = error.response?.data?.error || 'Произошла ошибка';
@@ -51,65 +61,47 @@ function ViewRequests() {
   
       fetchIncomingRequests();
     }, []);
-    const handleUpdateStatus = async (requestId, newStatus, selectedAcademy) => {
-        try {
-          const token = localStorage.getItem('token');
-          
-          const config = {
-            method: 'patch',
-            url: `http://localhost:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-              status: newStatus,
-            }),
-          };
-    
-          await sendRequest(config);
-    
-          // Обновление статуса в incomingRequests
-          const updatedRequests = incomingRequests.map((request) => {
-            if (request.id === requestId) {
-              return {
-                ...request,
-                status: newStatus,
-              };
-            }
-            return request;
-          });
-    
-          setIncomingRequests(updatedRequests);
-    
-          console.log(`Статус заявки ${requestId} обновлен на ${newStatus}`);
-        } catch (error) {
-          console.error('Ошибка при обновлении статуса', error);
-          const errMsg = error.response?.data?.error || 'Произошла ошибка';
-          setErrorMessage(errMsg);
-        }
-      };
+
       return (
 <div className='incoming-requests-container'>
-  <h2>Присланные заявки</h2>
+  <h2>Отправленные заявки</h2>
   {errorMessage && <p className="error">{errorMessage}</p>}
-  <ul>
-    {incomingRequests.map((request) => (
-      <li key={request.id} className="incoming-requests-item">
-        <strong>Академия Отправившая запрос:</strong> {request.sender_academy} | <strong>Исполнитель:</strong> {request.workerData?.name || ""} {request.workerData.surname} | <strong>Описание:</strong> {request.description} | <strong>Статус:</strong> {request.status === "scheduled" ? "Запрошено" : request.status }
-        <select onChange={(e) => setNewStatus(e.target.value)} value={newStatus} className="status-select">
+  <div className="requests-columns">
+          {
+          statusOptions.map(status => (
+            <div key={status} className={`request-column request-column-${status}`}>
+              <h2 className='open-request-button'>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
+              
+              {(
+                <ul>
+                  { (groupedRequests[status] || []).map(request => (
+                    <li key={request.id} className="incoming-requests-item">
+                      <div className="request-info">
+                      <strong>Академия Получвшая Запрос:</strong> {request.receiving_academy}
+                      </div>
+                      <div className="request-info">
+                          <strong>Исполнитель:</strong> {request.workerData?.name} {request.workerData?.surname}
+                      </div>
+                      <div className="request-info">
+                          <strong>Описание:</strong> {request.description}
+                      </div>
+                      <div className="request-info">
+                      <strong>Статус:</strong> { convertStatusToRu(request.status)}
+                      </div>
+                      <div className="request-info">
 
-          {statusOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
+                      <Link to={`/incoming-requests/${request.id}`} className="view-request-button">
+                        Открыть карточку заявки
+                      </Link>
+                      </div>
+
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           ))}
-        </select>
-        <button onClick={() => handleUpdateStatus(request.id, newStatus, request.receiving_academy)} className="update-status-button">Обновить статус</button>
-
-      </li>
-    ))}
-  </ul>
+        </div>
 </div>
       );
 }
