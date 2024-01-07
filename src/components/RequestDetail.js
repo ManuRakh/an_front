@@ -5,6 +5,7 @@ import "../css/RequestDetail.css";
 import generateWorkersPromises from './utils/getWorkers';
 import updateRequestStatus from './utils/updateRequestStatus';
 import { convertStatusToRu } from './utils/convertStatusToEn';
+import Comments from './Comments';
 
 const RequestDetail = () => {
     const { requestId } = useParams();
@@ -109,6 +110,7 @@ const RequestDetail = () => {
 >
   Обновить статус
 </button>
+<Comments requestId={requestData.identifier} />
 
         </div>
       ) : (

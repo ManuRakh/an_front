@@ -34,7 +34,7 @@ function IncomingRequests() {
           const workersData = await Promise.all(workersPromises);
 
           const updatedRequests = response.map((request) => {
-            console.log(request, workersData)
+
             const matchingWorker = workersData.find((worker) => worker.id === request.worker_id);
   
             return {

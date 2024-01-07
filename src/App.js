@@ -26,6 +26,8 @@ function App() {
   const handleLoginSuccess = (data) => {
     if (data && data.token) {
       localStorage.setItem('token', data.token);
+      localStorage.setItem('user_id', data?.user?.id);
+
       setIsAuthenticated(true);
     } else {
       console.error('Токен не был получен');

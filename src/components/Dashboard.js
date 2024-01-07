@@ -93,7 +93,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       };
 
       const foundWorker = await sendRequest(config);
-      console.log({workers, foundWorker})
+
       if (foundWorker) setWorkers(currentWorkers => [...currentWorkers, foundWorker]);
 
     } catch (error) {

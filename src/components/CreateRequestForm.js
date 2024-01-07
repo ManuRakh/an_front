@@ -41,6 +41,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
           const response = await sendRequest(config);
 
           setAcademies(response);
+          setSelectedAcademy(response[0]);
         } catch (error) {
           console.error('Ошибка при получении данных о академиях', error);
         }
@@ -100,7 +101,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
         data: JSON.stringify(requestData),
       };
       const response = await sendRequest(config);
-      console.log(response)
+
       showMessage('Заявка успешно создана!', 'success', 3000);
 
       // Очищаем поля для ввода
