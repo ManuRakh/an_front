@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import "../css/Modal.css";
 import { sendRequest } from '../utils/sendRequest';
 import { useParams } from 'react-router-dom';
+import FileUpload from './FileUpload';
 
 const AddCommentModal = ({ requestId }) => {
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +41,7 @@ const AddCommentModal = ({ requestId }) => {
     let data = JSON.stringify({
         description: commentData.description,
         name: commentData.name,
-        file_ids: [], // Here you need to process and include the file IDs
+        file_ids: commentData.files || [], // Here you need to process and include the file IDs
         academy: currentAcademy, // Assuming this is static or passed as a prop
         request_id: requestId,
         user_id: userId,
@@ -61,7 +62,12 @@ const AddCommentModal = ({ requestId }) => {
       await sendRequest(config);
     handleCloseModal();
   };
+  const handleFileUpload = (uploadedFiles) => {
+    // Здесь вы можете обработать массив uploadedFiles и отправить их на бэкенд
+    console.log(uploadedFiles)
+    setCommentData({ ...commentData, files: uploadedFiles });
 
+  };
   return (
     <div>
       <div className="add-comment-button-container">
@@ -74,7 +80,7 @@ const AddCommentModal = ({ requestId }) => {
             <form onSubmit={handleSubmit}>
               <input type="text" name="name" placeholder="Name" value={commentData.name} onChange={handleInputChange} />
               <textarea name="description" placeholder="Description" value={commentData.description} onChange={handleInputChange} />
-              <input type="file" multiple onChange={handleFileChange} />
+              <FileUpload onFileUpload={handleFileUpload} /> {/* Добавьте компонент FileUpload здесь */}
               <button type="submit">Submit Comment</button>
             </form>
           </div>

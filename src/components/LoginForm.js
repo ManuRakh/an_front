@@ -16,6 +16,7 @@ function LoginForm({ onLoginSuccess }) {
         academy, // Отправляем выбранное значение академии
       });
       console.log(response.data);
+      localStorage.setItem('academy', academy);
       onLoginSuccess(response.data);
     } catch (error) {
       console.error('Ошибка авторизации', error);

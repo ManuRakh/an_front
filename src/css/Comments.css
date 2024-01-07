@@ -84,3 +84,57 @@
     color: #555;
   }
   
+  
+  a {
+    text-decoration: none;
+  }
+  
+  /* Button and the icon */
+  .section {
+    width: 100%;
+    height: 100vh;
+    display: table;
+  }
+  
+  .center {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  .trigger {
+    position: relative;
+    background: #4a1942;
+    display: inline-block;
+    width: 200px;
+    height: 60px;
+    border-radius: 50em;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+
+  
+  em,
+  i {
+    transition: top 0.3s;
+  }
+  
+  span {
+    /*
+    uncomment this to see where actually the
+    Download and SVG located on initial state
+    and on hover
+    */
+    overflow: hidden;
+  }
+  
+  em {
+    line-height: 60px; /*make the button text vertically center of the button*/
+    top: 0;
+  }
+  
+  i {
+    top: 100%; /*moving out the SVG to the bottom on page loads*/
+    padding-top: 20px;
+  }
+  

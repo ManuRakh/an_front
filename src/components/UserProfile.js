@@ -2,14 +2,74 @@ import React, { useState, useEffect } from 'react';
 import '../css/UserProfile.css'; // Убедитесь, что путь к файлу стилей верный
 import axios from 'axios';
 import Logout from './Logout';
+import { sendRequest } from '../utils/sendRequest';
+import "../css/UserProfile.css";
+
 function UserProfile() {
     const [editing, setEditing] = useState(false);
     const [user, setUser] = useState({
       name: 'Имя',
-      surname: 'Фамилия',
-      // другие данные пользователя...
     });
   
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const config = {
+          method: 'get',
+          url: `http://localhost:3002/users/me`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const response = await sendRequest(config);
+
+        const userData = response;
+        setUser(userData);
+      } catch (error) {
+        console.error('Ошибка при получении данных пользователя', error);
+      }
+    };
+
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        const interval = setInterval(() => {
+          const token = localStorage.getItem('token');
+          if (token) {
+            fetchUser();
+            clearInterval(interval);
+          }
+        }, 1000);
+    
+      }
+      else fetchUser();
+    }, []);
+
+    const handleSave = async () => {
+      // Функция для сохранения данных пользователя
+      try {
+        const token = localStorage.getItem('token'); // Получите токен из localStorage
+        const config = {
+          method: 'patch',
+          url: `http://localhost:3002/users/me`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify(user),
+        };
+
+        await sendRequest(config);
+        await fetchUser();
+        setEditing(false);
+      } catch (error) {
+        console.error('Ошибка при сохранении данных пользователя', error);
+      }
+    };
+
     const handleLogout = () => {
       // Ваш код для обработки выхода из системы
     };
@@ -17,18 +77,12 @@ function UserProfile() {
     const toggleEdit = () => {
       setEditing(!editing);
     };
-  
-    const handleSave = () => {
-      // Ваш код для сохранения данных пользователя
-      setEditing(false);
-    };
-  
+
     return (
       <div className="user-profile">
         {editing ? (
           <>
             <input type="text" value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} />
-            <input type="text" value={user.surname} onChange={(e) => setUser({ ...user, surname: e.target.value })} />
             {/* Добавьте другие поля для редактирования, если необходимо */}
             <button className="save-button" onClick={handleSave}>Сохранить</button>
           </>
@@ -41,10 +95,10 @@ function UserProfile() {
             <button className="edit-button" onClick={toggleEdit}>Редактировать</button>
           </>
         )}
-        <Logout/>
+        <Logout />
       </div>
     );
-  }
+    }
   
   export default UserProfile;
   
