@@ -13,8 +13,20 @@ function Dashboard({ onSetIsAuthenticated }) {
   const [users, setUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState([]);
 
+  const [user, setUser] = useState({ 
+    name: '', 
+    phone: '',
+    telegram: '',
+    role: '',
+    username: '',
+    password: '',
+  });
   const handleChange = (e) => {
     setWorker({ ...worker, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeUser = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
@@ -32,8 +44,8 @@ function Dashboard({ onSetIsAuthenticated }) {
           }
         };
 
-        const response = await sendRequest(config);
-
+        const response = (await sendRequest(config))?.filter(res => res !== null);
+        
         setWorkers(response);
       } catch (error) {
         console.error('Ошибка при получении данных о сотрудниках', error);
@@ -84,7 +96,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       });
   
       // Обновляем состояние, исключая удаленного сотрудника
-      setWorkers(currentWorkers => currentWorkers.filter(w => w.id !== workerId));
+      setAllWorkers(currentWorkers => currentWorkers.filter(w => w.id !== workerId));
     } catch (error) {
       console.error('Ошибка при удалении сотрудника', error);
     }
@@ -95,6 +107,8 @@ function Dashboard({ onSetIsAuthenticated }) {
 
     try {
       const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('user_id');
+      worker.user_id = userId;
       const config = {
         method: 'post',
         url: 'http://localhost:3002/workers',
@@ -107,8 +121,33 @@ function Dashboard({ onSetIsAuthenticated }) {
 
       const foundWorker = await sendRequest(config);
 
-      if (foundWorker) setWorkers(currentWorkers => [...currentWorkers, foundWorker]);
+      if (foundWorker) setAllWorkers(currentWorkers => [...currentWorkers, foundWorker]);
 
+    } catch (error) {
+      console.error('Ошибка при создании воркера', error);
+    }
+  };
+
+  const handleSubmitUser = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem('token');
+      const currentAcademy = localStorage.getItem('academy');
+
+      const config = {
+        method: 'post',
+        url: `http://localhost:3002/users?selected_academy=${currentAcademy}`,
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        data: user
+      };
+
+      await sendRequest(config);
+
+      console.log("User was created successfully");
     } catch (error) {
       console.error('Ошибка при создании воркера', error);
     }
@@ -119,7 +158,7 @@ function Dashboard({ onSetIsAuthenticated }) {
 
             <WorkerList workers={allWorkers} onDeleteWorker={handleDeleteWorker} />
 
-      { !workers.length && (
+      { workers.length === 0 && (
       <div className="create-worker-form">
         <h2>Создание Работника</h2>
         <form onSubmit={handleSubmit}>
@@ -143,11 +182,26 @@ function Dashboard({ onSetIsAuthenticated }) {
       <br/>
       {isAdmin && (
               <div className="create-worker-form">
+              <h1>Админ может создавать пользователей</h1>
+        <br/>
               <h2>Создание Пользователя</h2>
-              <form onSubmit={handleSubmit}>
-          <input type="text" name="spec" value={worker.spec} onChange={handleChange} placeholder="Должность" />
-          <input type="text" name="name" value={worker.name} onChange={handleChange} placeholder="Имя" />
-          <input type="text" name="surname" value={worker.surname} onChange={handleChange} placeholder="Фамилия" />
+
+              <form onSubmit={handleSubmitUser}>
+                Имя пользователя <br/>
+          <input type="text" name="name" value={user.name} onChange={handleChangeUser} placeholder="Имя" />
+          Роль (admin, работник) <br/>
+          <input type="text" name="role" value={user.role} onChange={handleChangeUser} placeholder="Роль (админ, работник)" />
+          Номер телефона <br/>
+          <input type="phone" name="phone" value={user.phone} onChange={handleChangeUser} placeholder="Номер телефона" />
+          Телеграм(если есть) <br/>
+          <input type="text" name="telegram" value={user.telegram} onChange={handleChangeUser} placeholder="Telegram" />
+          Никнейм пользователя,должен быть уникальным <br/>
+          <input type="text" name="username" value={user.username} onChange={handleChangeUser} placeholder="Никнейм, уникальный" />
+          Пароль <br/>
+          <input type="text" name="password" value={user.password} onChange={handleChangeUser} placeholder="Пароль" />
+          <button type="submit">Создать Пользователя</button>
+
+
 </form>
                 </div>
       )}
