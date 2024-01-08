@@ -97,6 +97,8 @@ function Dashboard({ onSetIsAuthenticated }) {
   
       // Обновляем состояние, исключая удаленного сотрудника
       setAllWorkers(currentWorkers => currentWorkers.filter(w => w.id !== workerId));
+      if (workers[0]?.id === workerId) setWorkers([]);
+
     } catch (error) {
       console.error('Ошибка при удалении сотрудника', error);
     }
@@ -122,6 +124,8 @@ function Dashboard({ onSetIsAuthenticated }) {
       const foundWorker = await sendRequest(config);
 
       if (foundWorker) setAllWorkers(currentWorkers => [...currentWorkers, foundWorker]);
+
+      setWorkers([foundWorker]);
 
     } catch (error) {
       console.error('Ошибка при создании воркера', error);
