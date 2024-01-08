@@ -58,7 +58,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
               const response = await fetchWorkersFn(selectedAcademy);
 
               setWorkers(response);
-              setSelectedWorker(response[0]?.id || "");
+              setSelectedWorker(response[0] || '');
             } catch (error) {
               console.error('Ошибка при получении данных о сотрудниках', error);
               const errMsg = error.response?.data?.error;
@@ -76,8 +76,14 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try{
-    const requestData = {
-      worker_id: selectedWorker,
+      const foundWorker = typeof selectedWorker === "string" ? workers.find(worker => {
+        return worker.id === selectedWorker;
+      }): selectedWorker;
+
+      console.log(foundWorker)
+      const requestData = {
+      worker_id: foundWorker.id,
+      receiver_user_id: foundWorker.user_id,
       description,
     };
     const token = localStorage.getItem('token'); 
@@ -91,7 +97,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
         },
         data: JSON.stringify(requestData),
       };
-      const response = await sendRequest(config);
+      await sendRequest(config);
 
       showMessage('Заявка успешно создана!', 'success', 3000);
 
