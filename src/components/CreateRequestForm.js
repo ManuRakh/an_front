@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { sendRequest } from '../utils/sendRequest';
 import '../css/RequestForm.css';
+import fetchWorkersFn from './utils/fetchAllWorkers';
 
 function CreateRequestForm({ onSetIsAuthenticated }) {
     const [academies, setAcademies] = useState([]);
@@ -53,19 +54,9 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
     useEffect(() => {
         if (selectedAcademy) {
           const fetchWorkers = async () => {
-            try {
-              const token = localStorage.getItem('token');
-              const config = {
-                method: 'get',
-                url: `http://localhost:3002/workers?selected_academy=${selectedAcademy}`, // Обратите внимание на базовый URL
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  'Content-Type': 'application/json',
-                },
-              };
-    
-              const response = await sendRequest(config);
-    
+            try {  
+              const response = await fetchWorkersFn(selectedAcademy);
+
               setWorkers(response);
               setSelectedWorker(response[0]?.id || "");
             } catch (error) {

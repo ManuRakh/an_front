@@ -4,6 +4,7 @@ import axios from 'axios';
 import Logout from './Logout';
 import { sendRequest } from '../utils/sendRequest';
 import "../css/UserProfile.css";
+import getMe from './utils/getMe';
 
 function UserProfile() {
     const [editing, setEditing] = useState(false);
@@ -13,20 +14,9 @@ function UserProfile() {
   
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const config = {
-          method: 'get',
-          url: `http://localhost:3002/users/me`,
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        };
+        const response = await getMe();
 
-        const response = await sendRequest(config);
-
-        const userData = response;
-        setUser(userData);
+        setUser(response);
       } catch (error) {
         console.error('Ошибка при получении данных пользователя', error);
       }

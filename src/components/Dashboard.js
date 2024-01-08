@@ -3,11 +3,15 @@ import axios from 'axios';
 import '../css/Dashboard.css';
 import WorkerList from "./WorkerList.js";
 import { sendRequest } from '../utils/sendRequest.js';
+import fetchWorkersFn from './utils/fetchAllWorkers.js';
+import getMe from './utils/getMe.js';
 
 function Dashboard({ onSetIsAuthenticated }) {
   const [worker, setWorker] = useState({ spec: '', name: '', surname: '' });
   const [workers, setWorkers] = useState([]);
+  const [allWorkers, setAllWorkers] = useState([]);
   const [users, setUsers] = useState([]);
+  const [isAdmin, setIsAdmin] = useState([]);
 
   const handleChange = (e) => {
     setWorker({ ...worker, [e.target.name]: e.target.value });
@@ -17,9 +21,11 @@ function Dashboard({ onSetIsAuthenticated }) {
     const fetchWorkers = async () => {
       try {
         const token = localStorage.getItem('token');
+        const currentAcademy = localStorage.getItem('academy');
+
         const config = {
           method: 'get',
-          url: 'http://localhost:3002/workers',
+          url: `http://localhost:3002/workers?selected_academy=${currentAcademy}`,
           headers: { 
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -35,25 +41,32 @@ function Dashboard({ onSetIsAuthenticated }) {
         if (errMsg === "Not authenticated") onSetIsAuthenticated(false)
       }
     };
+
+    const fetchAllWorkers = async () => {
+      try {
+        const response = await fetchWorkersFn();
+
+        setAllWorkers(response);
+      } catch (error) {
+        console.error('Ошибка при получении данных о сотрудниках', error);
+        const errMsg = error.response.data.error;
+        if (errMsg === "Not authenticated") onSetIsAuthenticated(false)
+      }
+    };
+
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const config = {
-          method: 'get',
-          url: 'http://localhost:3002/users',
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        };
-        const response = await sendRequest(config);
-        setUsers(response);
+        const response = await getMe();
+
+        setIsAdmin(response.role === "admin");
       } catch (error) {
         console.error('Ошибка при получении данных о пользователях', error);
       }
     };
 
+    
     fetchWorkers();
+    fetchAllWorkers();
     fetchUsers();
   }, []);
 
@@ -102,15 +115,18 @@ function Dashboard({ onSetIsAuthenticated }) {
   };
   return (
     <div className="dashboard-container">
-            <WorkerList workers={workers} onDeleteWorker={handleDeleteWorker} />
+            <h4>Один пользователь может иметь не более 1 работника академии в системе. Если вы админ, вам доступно создание пользователей, после этого пользователь сам создаст себе работника академии</h4>
 
+            <WorkerList workers={allWorkers} onDeleteWorker={handleDeleteWorker} />
+
+      { !workers.length && (
       <div className="create-worker-form">
-        <h2>Создание Сотрудника</h2>
+        <h2>Создание Работника</h2>
         <form onSubmit={handleSubmit}>
           <input type="text" name="spec" value={worker.spec} onChange={handleChange} placeholder="Должность" />
           <input type="text" name="name" value={worker.name} onChange={handleChange} placeholder="Имя" />
           <input type="text" name="surname" value={worker.surname} onChange={handleChange} placeholder="Фамилия" />
-          <select 
+          {/* <select 
             name="user_id" 
             value={worker.user_id} 
             onChange={handleChange} 
@@ -120,10 +136,21 @@ function Dashboard({ onSetIsAuthenticated }) {
             {users.map(user => (
               <option key={user.id} value={user.id}>{user.name} {user.surname}</option>
             ))}
-          </select>
-          <button type="submit">Создать Сотрудника</button>
+          </select> */}
+          <button type="submit">Создать Работника</button>
         </form>
-      </div>
+      </div>)}
+      <br/>
+      {isAdmin && (
+              <div className="create-worker-form">
+              <h2>Создание Пользователя</h2>
+              <form onSubmit={handleSubmit}>
+          <input type="text" name="spec" value={worker.spec} onChange={handleChange} placeholder="Должность" />
+          <input type="text" name="name" value={worker.name} onChange={handleChange} placeholder="Имя" />
+          <input type="text" name="surname" value={worker.surname} onChange={handleChange} placeholder="Фамилия" />
+</form>
+                </div>
+      )}
     </div>
   );
 }
