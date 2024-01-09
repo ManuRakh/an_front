@@ -3,6 +3,8 @@ import axios from 'axios';
 import { sendRequest } from '../utils/sendRequest';
 import "../css/Comments.css";
 import Modal from "./Modal";
+import dotenv from "dotenv";
+dotenv.config();
 
 const downloadFile = (base64Data, fileName) => {
     const byteArray = atob(base64Data.split(',')[1]);
@@ -38,7 +40,7 @@ const Comments = ({ requestId }) => {
       try {
         const config = {
             method: 'get',
-            url: `http://localhost:3002/comments/requests/${requestId}`,
+            url: `${process.env.main_host}/comments/requests/${requestId}`,
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ const Comments = ({ requestId }) => {
                 for (const fileId of parsedFiles) {
                     const fileConfig = {
                         method: 'get',
-                        url: `http://localhost:3002/files/${fileId}`,
+                        url: `${process.env.main_host}/files/${fileId}`,
                         headers: {
                           Authorization: `Bearer ${token}`,
                           'Content-Type': 'application/json',
@@ -88,7 +90,7 @@ const Comments = ({ requestId }) => {
       if (user_id === comment.user_id) {
         const config = {
           method: 'delete',
-          url: `http://localhost:3002/comments/${commentId}`,
+          url: `${process.env.main_host}/comments/${commentId}`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

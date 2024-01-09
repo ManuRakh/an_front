@@ -6,6 +6,8 @@ import generateWorkersPromises from './utils/getWorkers';
 import updateRequestStatus from './utils/updateRequestStatus';
 import { convertStatusToRu } from './utils/convertStatusToEn';
 import Comments from './Comments';
+import dotenv from "dotenv";
+dotenv.config();
 
 const RequestDetail = () => {
     const { requestId } = useParams();
@@ -21,7 +23,7 @@ const RequestDetail = () => {
 
         const config = {
           method: 'get',
-          url: `http://localhost:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
+          url: `${process.env.main_host}/requests/${requestId}?selected_academy=${selectedAcademy}`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -50,7 +52,7 @@ const RequestDetail = () => {
 
       const config = {
         method: 'get',
-        url: `http://localhost:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
+        url: `${process.env.main_host}/requests/${requestId}?selected_academy=${selectedAcademy}`,
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

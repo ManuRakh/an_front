@@ -3,6 +3,8 @@ import "../css/Modal.css";
 import { sendRequest } from '../utils/sendRequest';
 import { useParams } from 'react-router-dom';
 import FileUpload from './FileUpload';
+import dotenv from "dotenv";
+dotenv.config();
 
 const AddCommentModal = ({ requestId }) => {
   const [showModal, setShowModal] = useState(false);
@@ -50,7 +52,7 @@ const AddCommentModal = ({ requestId }) => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'http://localhost:3002/comments',
+        url: `${process.env.main_host}/comments`,
         headers: { 
           'accept': 'application/json', 
           'Content-Type': 'application/json', 

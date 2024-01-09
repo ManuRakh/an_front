@@ -1,4 +1,6 @@
 import { sendRequest } from "../../utils/sendRequest";
+import dotenv from "dotenv";
+dotenv.config();
 
 const fetchWorkersFn = async (selectedAcademy) => {
     const token = localStorage.getItem('token');
@@ -6,7 +8,7 @@ const fetchWorkersFn = async (selectedAcademy) => {
 
         const config = {
           method: 'get',
-          url: `http://localhost:3002/workers?all=true&selected_academy=${selectedAcademy || currentAcademy}`,
+          url: `${process.env.main_host}/workers?all=true&selected_academy=${selectedAcademy || currentAcademy}`,
           headers: { 
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

@@ -1,4 +1,6 @@
 import { sendRequest } from "../../utils/sendRequest";
+import dotenv from "dotenv";
+dotenv.config();
 
 const generateWorkersPromises = (response, token, sender = false) => {
     const workersPromises = response.map(async (request) => {
@@ -7,7 +9,7 @@ const generateWorkersPromises = (response, token, sender = false) => {
         const receivingAcademy = request.receiving_academy;
         const workerConfig = {
           method: 'get',
-          url: `http://localhost:3002/workers/${workerId}?selected_academy=${sender === true ? senderAcademy: receivingAcademy }`,
+          url: `${process.env.main_host}/workers/${workerId}?selected_academy=${sender === true ? senderAcademy: receivingAcademy }`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

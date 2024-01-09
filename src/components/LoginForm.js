@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import dotenv from "dotenv";
+dotenv.config();
 
 function LoginForm({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
@@ -10,7 +12,7 @@ function LoginForm({ onLoginSuccess }) {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3002/auth/login', {
+      const response = await axios.post(`${process.env.main_host}/auth/login`, {
         username,
         password,
         academy, // Отправляем выбранное значение академии

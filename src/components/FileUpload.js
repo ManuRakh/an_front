@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { sendRequest } from '../utils/sendRequest';
+import dotenv from "dotenv";
+dotenv.config();
 
 const FileUpload = ({ onFileUpload }) => {
   const [files, setFiles] = useState([]);
@@ -28,7 +30,7 @@ const FileUpload = ({ onFileUpload }) => {
 
                 const config = {
                   method: 'post',
-                  url: 'http://localhost:3002/files',
+                  url: `${process.env.main_host}/files`,
                   headers: { 
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
