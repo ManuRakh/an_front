@@ -3,8 +3,7 @@ import axios from 'axios';
 import { sendRequest } from '../utils/sendRequest';
 import '../css/RequestForm.css';
 import fetchWorkersFn from './utils/fetchAllWorkers';
-import dotenv from "dotenv";
-dotenv.config();
+
 
 function CreateRequestForm({ onSetIsAuthenticated }) {
     const [academies, setAcademies] = useState([]);
@@ -34,7 +33,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
           const token = localStorage.getItem('token');
           const config = {
             method: 'get',
-            url: `${process.env.main_host}/supporting_academies`, // Обратите внимание, что мы убрали базовый URL
+            url: `http://151.248.115.23:3002/supporting_academies`, // Обратите внимание, что мы убрали базовый URL
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -92,7 +91,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
 
     const config = {
         method: 'post',
-        url: `${process.env.main_host}/requests?selected_academy=${selectedAcademy}`, // Обратите внимание на базовый URL
+        url: `http://151.248.115.23:3002/requests?selected_academy=${selectedAcademy}`, // Обратите внимание на базовый URL
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

@@ -5,8 +5,6 @@ import Logout from './Logout';
 import { sendRequest } from '../utils/sendRequest';
 import "../css/UserProfile.css";
 import getMe from './utils/getMe';
-import dotenv from "dotenv";
-dotenv.config();
 
 function UserProfile() {
     const [editing, setEditing] = useState(false);
@@ -46,7 +44,7 @@ function UserProfile() {
         const token = localStorage.getItem('token'); // Получите токен из localStorage
         const config = {
           method: 'patch',
-          url: `${process.env.main_host}/users/me`,
+          url: `http://151.248.115.23:3002/users/me`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

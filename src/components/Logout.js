@@ -1,8 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import "../css/Header.css";
-import dotenv from "dotenv";
-dotenv.config();
 
 function Logout() {
   const handleLogout = () => {
@@ -13,7 +11,7 @@ function Logout() {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${process.env.main_host}/auth/logout`,
+      url: `http://151.248.115.23:3002/auth/logout`,
       headers: { 
         'accept': 'application/json', 
         'Content-Type': 'application/json', 

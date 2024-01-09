@@ -1,12 +1,10 @@
 import { sendRequest } from "../../utils/sendRequest";
-import dotenv from "dotenv";
-dotenv.config();
 
 const getMe = async () => {
     const token = localStorage.getItem('token');
     const config = {
       method: 'get',
-      url: `${process.env.main_host}/users/me`,
+      url: `http://151.248.115.23:3002/users/me`,
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

@@ -5,8 +5,6 @@ import WorkerList from "./WorkerList.js";
 import { sendRequest } from '../utils/sendRequest.js';
 import fetchWorkersFn from './utils/fetchAllWorkers.js';
 import getMe from './utils/getMe.js';
-import dotenv from "dotenv";
-dotenv.config();
 
 function Dashboard({ onSetIsAuthenticated }) {
   const [worker, setWorker] = useState({ spec: '', name: '', surname: '' });
@@ -39,7 +37,7 @@ function Dashboard({ onSetIsAuthenticated }) {
 
         const config = {
           method: 'get',
-          url: `${process.env.main_host}/workers?selected_academy=${currentAcademy}`,
+          url: `http://151.248.115.23:3002/workers?selected_academy=${currentAcademy}`,
           headers: { 
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -90,7 +88,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       const currentAcademy = localStorage.getItem('academy');
       await sendRequest({
         method: 'delete',
-        url: `${process.env.main_host}/workers/${workerId}?selected_academy=${currentAcademy}`,
+        url: `http://151.248.115.23:3002/workers/${workerId}?selected_academy=${currentAcademy}`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -115,7 +113,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       worker.user_id = userId;
       const config = {
         method: 'post',
-        url: `${process.env.main_host}/workers`,
+        url: `http://151.248.115.23:3002/workers`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -143,7 +141,7 @@ function Dashboard({ onSetIsAuthenticated }) {
 
       const config = {
         method: 'post',
-        url: `${process.env.main_host}/users?selected_academy=${currentAcademy}`,
+        url: `http://151.248.115.23:3002/users?selected_academy=${currentAcademy}`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

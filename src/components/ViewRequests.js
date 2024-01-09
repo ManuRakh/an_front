@@ -7,8 +7,6 @@ import generateWorkersPromises from "./utils/getWorkers";
 import updateRequestStatus from "./utils/updateRequestStatus";
 import { Link } from 'react-router-dom'; // Импортируйте Link из react-router-dom
 import { convertStatusToEn, convertStatusToRu } from "./utils/convertStatusToEn";
-import dotenv from "dotenv";
-dotenv.config();
 
 function ViewRequests() {
     const [incomingRequests, setIncomingRequests] = useState([]);
@@ -23,7 +21,7 @@ function ViewRequests() {
           const selectedAcademy = localStorage.getItem('academy');
           const config = {
             method: 'get',
-            url: `${process.env.main_host}/requests/outcoming/requests?selected_academy=${selectedAcademy}`,
+            url: `http://151.248.115.23:3002/requests/outcoming/requests?selected_academy=${selectedAcademy}`,
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',

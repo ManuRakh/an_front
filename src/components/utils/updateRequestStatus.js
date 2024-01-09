@@ -1,6 +1,5 @@
 import { sendRequest } from '../../utils/sendRequest';
-import dotenv from "dotenv";
-dotenv.config();
+
 
 const updateRequestStatus = async (request, newStatus, selectedAcademy) => {
     const { id: requestId } = request;
@@ -10,7 +9,7 @@ const updateRequestStatus = async (request, newStatus, selectedAcademy) => {
     
     const config = {
       method: 'patch',
-      url: `${process.env.main_host}/requests/${requestId}?selected_academy=${selectedAcademy}`,
+      url: `http://151.248.115.23:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
