@@ -4,7 +4,9 @@
   "description": "Frontend Part for Academy of Sciences or Republic of Tajikistan",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --mode development "
+    "start": "webpack serve --mode development ",
+    "build": "webpack --mode production"
+
   },
   "author": "",
   "license": "ISC",
