@@ -21,7 +21,7 @@ function ViewRequests() {
           const selectedAcademy = localStorage.getItem('academy');
           const config = {
             method: 'get',
-            url: `http://151.248.115.23:3002/requests/outcoming/requests?selected_academy=${selectedAcademy}`,
+            url: `http://89.111.174.159:3002/requests/outcoming/requests?selected_academy=${selectedAcademy}`,
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',

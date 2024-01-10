@@ -10,7 +10,7 @@ function LoginForm({ onLoginSuccess }) {
     event.preventDefault();
 
     try {
-      const response = await axios.post(`http://151.248.115.23:3002/auth/login`, {
+      const response = await axios.post(`http://89.111.174.159:3002/auth/login`, {
         username,
         password,
         academy, // Отправляем выбранное значение академии

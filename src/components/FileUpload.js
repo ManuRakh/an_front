@@ -28,7 +28,7 @@ const FileUpload = ({ onFileUpload }) => {
 
                 const config = {
                   method: 'post',
-                  url: `http://151.248.115.23:3002/files`,
+                  url: `http://89.111.174.159:3002/files`,
                   headers: { 
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

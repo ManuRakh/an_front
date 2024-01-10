@@ -9,7 +9,7 @@ const updateRequestStatus = async (request, newStatus, selectedAcademy) => {
     
     const config = {
       method: 'patch',
-      url: `http://151.248.115.23:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
+      url: `http://89.111.174.159:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

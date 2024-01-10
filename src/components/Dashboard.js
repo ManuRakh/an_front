@@ -37,7 +37,7 @@ function Dashboard({ onSetIsAuthenticated }) {
 
         const config = {
           method: 'get',
-          url: `http://151.248.115.23:3002/workers?selected_academy=${currentAcademy}`,
+          url: `http://89.111.174.159:3002/workers?selected_academy=${currentAcademy}`,
           headers: { 
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       const currentAcademy = localStorage.getItem('academy');
       await sendRequest({
         method: 'delete',
-        url: `http://151.248.115.23:3002/workers/${workerId}?selected_academy=${currentAcademy}`,
+        url: `http://89.111.174.159:3002/workers/${workerId}?selected_academy=${currentAcademy}`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -113,7 +113,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       worker.user_id = userId;
       const config = {
         method: 'post',
-        url: `http://151.248.115.23:3002/workers`,
+        url: `http://89.111.174.159:3002/workers`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -141,7 +141,7 @@ function Dashboard({ onSetIsAuthenticated }) {
 
       const config = {
         method: 'post',
-        url: `http://151.248.115.23:3002/users?selected_academy=${currentAcademy}`,
+        url: `http://89.111.174.159:3002/users?selected_academy=${currentAcademy}`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

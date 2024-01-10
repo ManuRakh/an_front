@@ -7,7 +7,7 @@ const generateWorkersPromises = (response, token, sender = false) => {
         const receivingAcademy = request.receiving_academy;
         const workerConfig = {
           method: 'get',
-          url: `http://151.248.115.23:3002/workers/${workerId}?selected_academy=${sender === true ? senderAcademy: receivingAcademy }`,
+          url: `http://89.111.174.159:3002/workers/${workerId}?selected_academy=${sender === true ? senderAcademy: receivingAcademy }`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

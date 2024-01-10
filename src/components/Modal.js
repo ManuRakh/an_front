@@ -50,7 +50,7 @@ const AddCommentModal = ({ requestId }) => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `http://151.248.115.23:3002/comments`,
+        url: `http://89.111.174.159:3002/comments`,
         headers: { 
           'accept': 'application/json', 
           'Content-Type': 'application/json', 

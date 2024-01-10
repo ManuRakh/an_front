@@ -6,7 +6,7 @@ const fetchWorkersFn = async (selectedAcademy) => {
 
         const config = {
           method: 'get',
-          url: `http://151.248.115.23:3002/workers?all=true&selected_academy=${selectedAcademy || currentAcademy}`,
+          url: `http://89.111.174.159:3002/workers?all=true&selected_academy=${selectedAcademy || currentAcademy}`,
           headers: { 
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

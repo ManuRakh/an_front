@@ -11,7 +11,7 @@ function Logout() {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `http://151.248.115.23:3002/auth/logout`,
+      url: `http://89.111.174.159:3002/auth/logout`,
       headers: { 
         'accept': 'application/json', 
         'Content-Type': 'application/json', 

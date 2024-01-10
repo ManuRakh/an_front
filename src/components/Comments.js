@@ -39,7 +39,7 @@ const Comments = ({ requestId }) => {
       try {
         const config = {
             method: 'get',
-            url: `http://151.248.115.23:3002/comments/requests/${requestId}`,
+            url: `http://89.111.174.159:3002/comments/requests/${requestId}`,
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ const Comments = ({ requestId }) => {
                 for (const fileId of parsedFiles) {
                     const fileConfig = {
                         method: 'get',
-                        url: `http://151.248.115.23:3002/files/${fileId}`,
+                        url: `http://89.111.174.159:3002/files/${fileId}`,
                         headers: {
                           Authorization: `Bearer ${token}`,
                           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const Comments = ({ requestId }) => {
       if (user_id === comment.user_id) {
         const config = {
           method: 'delete',
-          url: `http://151.248.115.23:3002/comments/${commentId}`,
+          url: `http://89.111.174.159:3002/comments/${commentId}`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

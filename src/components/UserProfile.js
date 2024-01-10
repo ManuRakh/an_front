@@ -44,7 +44,7 @@ function UserProfile() {
         const token = localStorage.getItem('token'); // Получите токен из localStorage
         const config = {
           method: 'patch',
-          url: `http://151.248.115.23:3002/users/me`,
+          url: `http://89.111.174.159:3002/users/me`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
