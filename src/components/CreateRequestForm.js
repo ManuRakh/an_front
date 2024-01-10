@@ -46,6 +46,14 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
           setSelectedAcademy(response[0]);
         } catch (error) {
           console.error('Ошибка при получении данных о академиях', error);
+          const errMsg = error.response?.data?.error || 'Произошла ошибка';
+          setErrorMessage(errMsg);
+  
+          showMessage(errMsg, 'error', 3000);
+  
+          if (errMsg === 'Not authenticated') {
+            return onSetIsAuthenticated(false);
+          }
         }
       };
   
@@ -108,21 +116,22 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
     } catch (error) {
         console.error('Ошибка при отправке заявки', error);
         const errMsg = error.response?.data?.error || 'Произошла ошибка';
+        setErrorMessage(errMsg);
+
+        showMessage(errMsg, 'error', 3000);
+
         if (errMsg === 'Not authenticated') {
           return onSetIsAuthenticated(false);
         }
-        else {
-            setErrorMessage(errMsg);
 
-            showMessage(errMsg, 'error', 3000);
-      
-        }
       }
   
   };
 
   return (
     <div>
+              {errorMessage && <p className="error">{errorMessage}</p>}
+
     <form onSubmit={handleSubmit} className="create-request-form">
       <div>
         <label>Выберите академию:</label>

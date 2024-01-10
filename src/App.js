@@ -57,10 +57,10 @@ function App() {
           />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/about" element={<About />} /> {/* Добавление маршрута для страницы "about" */}
-          <Route path="/create-request" element={<CreateRequestForm />} /> {/* Добавление маршрута для страницы "about" */}
-          <Route path="/incoming-requests" element={<IncomingRequests />} /> {/* Добавляем новый маршрут */}
-          <Route path="/view-requests" element={<ViewRequests />} /> {/* Добавляем новый маршрут */}
-          <Route path="/incoming-requests/:requestId" element={<RequestDetail/>} />          
+          <Route path="/create-request" element={<CreateRequestForm onSetIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/incoming-requests" element={<IncomingRequests onSetIsAuthenticated={setIsAuthenticated}/>} /> {/* Добавляем новый маршрут */}
+          <Route path="/view-requests" element={<ViewRequests onSetIsAuthenticated={setIsAuthenticated}/>} /> {/* Добавляем новый маршрут */}
+          <Route path="/incoming-requests/:requestId" element={<RequestDetail onSetIsAuthenticated={setIsAuthenticated}/>} />          
         </Routes>
         <Footer />
       </div>

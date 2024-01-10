@@ -5,7 +5,7 @@ import generateWorkersPromises from './utils/getWorkers';
 import { Link } from 'react-router-dom'; // Импортируйте Link из react-router-dom
 import { convertStatusToEn, convertStatusToRu } from './utils/convertStatusToEn';
 
-function IncomingRequests() {
+function IncomingRequests({ onSetIsAuthenticated }) {
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [statusOptions] = useState(['Отправлено', 'В процессе', 'На проверке', 'Подтверждено']);
@@ -54,6 +54,9 @@ function IncomingRequests() {
           console.error('Ошибка при получении присланных заявок', error);
           const errMsg = error.response?.data?.error || 'Произошла ошибка';
           setErrorMessage(errMsg);
+          if (errMsg === 'Not authenticated') {
+            onSetIsAuthenticated(false);
+          }
         }
       };
   

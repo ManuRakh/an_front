@@ -7,7 +7,7 @@ import updateRequestStatus from './utils/updateRequestStatus';
 import { convertStatusToRu } from './utils/convertStatusToEn';
 import Comments from './Comments';
 
-const RequestDetail = () => {
+const RequestDetail = ({ onSetIsAuthenticated }) => {
     const { requestId } = useParams();
     const [requestData, setRequestData] = useState(null);
     const [statusOptions] = useState(['scheduled', 'processing', 'review', 'approved']);
@@ -36,37 +36,17 @@ const RequestDetail = () => {
         console.log(response)
         setRequestData(response);
       } catch (error) {
-        console.error(error);
+        console.error('Ошибка при получении данных о сотрудниках', error);
+              const errMsg = error.response?.data?.error;
+              if (errMsg === 'Not authenticated') {
+                onSetIsAuthenticated(false);
+              }
       }
     };
 
     fetchData();
   }, [requestId]);
 
-  const handleStatusChange = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const selectedAcademy = localStorage.getItem('academy');
-
-      const config = {
-        method: 'get',
-        url: `http://89.111.174.159:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      };
-
-      const response = await sendRequest(config);
-      const workersPromises = generateWorkersPromises([response], token, true);
-
-      const [workersData] = await Promise.all(workersPromises);
-      response.workerData = workersData;
-      setRequestData(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const updateStatus = async () => {
     try {
       await updateRequestStatus(requestData, newStatus, requestData.receiving_academy);

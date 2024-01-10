@@ -8,7 +8,7 @@ import updateRequestStatus from "./utils/updateRequestStatus";
 import { Link } from 'react-router-dom'; // Импортируйте Link из react-router-dom
 import { convertStatusToEn, convertStatusToRu } from "./utils/convertStatusToEn";
 
-function ViewRequests() {
+function ViewRequests({ onSetIsAuthenticated }) {
     const [incomingRequests, setIncomingRequests] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [groupedRequests, setGroupedRequests] = useState({});
@@ -56,6 +56,9 @@ function ViewRequests() {
           console.error('Ошибка при получении присланных заявок', error);
           const errMsg = error.response?.data?.error || 'Произошла ошибка';
           setErrorMessage(errMsg);
+          if (errMsg === 'Not authenticated') {
+            onSetIsAuthenticated(false);
+          }
         }
       };
   
