@@ -1,40 +1,38 @@
-import React from 'react';
-import axios from 'axios';
-import "../css/Header.css";
+import React from "react";
+import { Button } from "@chakra-ui/react";
+import axios from "axios";
 
 function Logout() {
   const handleLogout = () => {
-    // Get the access token from local storage
-    const token = localStorage.getItem('token');
-    
-    // Prepare the axios configuration
+    const token = localStorage.getItem("token");
+
     let config = {
-      method: 'post',
+      method: "post",
       maxBodyLength: Infinity,
       url: `http://89.111.174.159:3002/auth/logout`,
-      headers: { 
-        'accept': 'application/json', 
-        'Content-Type': 'application/json', 
-        'authorization': `Bearer ${token}`, 
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
       },
     };
 
-    // Make the axios request
-    axios.request(config)
-    .then((response) => {
-      console.log('Logout successful', response.data);
-      // Clear the local storage
-      localStorage.clear();
-      // Redirect to the home page or login page
-      window.location.href = '/';
-    })
-    .catch((error) => {
-      console.error('Logout failed', error);
-    });
+    axios
+      .request(config)
+      .then((response) => {
+        console.log("Logout successful", response.data);
+        localStorage.clear();
+        window.location.href = "/";
+      })
+      .catch((error) => {
+        console.error("Logout failed", error);
+      });
   };
 
   return (
-    <button className="logout-button" onClick={handleLogout}>Выйти</button>
+    <Button colorScheme="red" onClick={handleLogout} ml="2">
+      Выйти
+    </Button>
   );
 }
 

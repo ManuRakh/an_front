@@ -1,94 +1,95 @@
-import React, { useState, useEffect } from 'react';
-import '../css/UserProfile.css'; // Убедитесь, что путь к файлу стилей верный
-import axios from 'axios';
-import Logout from './Logout';
-import { sendRequest } from '../utils/sendRequest';
-import "../css/UserProfile.css";
-import getMe from './utils/getMe';
+import React, { useState, useEffect } from "react";
+import { sendRequest } from "../utils/sendRequest";
+import { Box, Input, Button, Text } from "@chakra-ui/react";
+import Logout from "./Logout";
+import getMe from "../components/utils/getMe";
 
 function UserProfile() {
-    const [editing, setEditing] = useState(false);
-    const [user, setUser] = useState({
-      name: 'Имя',
-    });
-  
-    const fetchUser = async () => {
-      try {
-        const response = await getMe();
+  const [editing, setEditing] = useState(false);
+  const [user, setUser] = useState({
+    name: "Имя",
+  });
 
-        setUser(response);
-      } catch (error) {
-        console.error('Ошибка при получении данных пользователя', error);
-      }
-    };
-
-    useEffect(() => {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        const interval = setInterval(() => {
-          const token = localStorage.getItem('token');
-          if (token) {
-            fetchUser();
-            clearInterval(interval);
-          }
-        }, 1000);
-    
-      }
-      else fetchUser();
-    }, []);
-
-    const handleSave = async () => {
-      // Функция для сохранения данных пользователя
-      try {
-        const token = localStorage.getItem('token'); // Получите токен из localStorage
-        const config = {
-          method: 'patch',
-          url: `http://89.111.174.159:3002/users/me`,
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          data: JSON.stringify(user),
-        };
-
-        await sendRequest(config);
-        await fetchUser();
-        setEditing(false);
-      } catch (error) {
-        console.error('Ошибка при сохранении данных пользователя', error);
-      }
-    };
-
-    const handleLogout = () => {
-      // Ваш код для обработки выхода из системы
-    };
-  
-    const toggleEdit = () => {
-      setEditing(!editing);
-    };
-
-    return (
-      <div className="user-profile">
-        {editing ? (
-          <>
-            <input type="text" value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} />
-            {/* Добавьте другие поля для редактирования, если необходимо */}
-            <button className="save-button" onClick={handleSave}>Сохранить</button>
-          </>
-        ) : (
-          <>
-            <div className="user-details">
-              <div className="user-name">{user.name} {user.surname}</div>
-              {/* Другая информация о пользователе */}
-            </div>
-            <button className="edit-button" onClick={toggleEdit}>Редактировать</button>
-          </>
-        )}
-        <Logout />
-      </div>
-    );
+  const fetchUser = async () => {
+    try {
+      const response = await getMe();
+      setUser(response);
+    } catch (error) {
+      console.error("Ошибка при получении данных пользователя", error);
     }
-  
-  export default UserProfile;
-  
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      const interval = setInterval(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+          fetchUser();
+          clearInterval(interval);
+        }
+      }, 1000);
+    } else {
+      fetchUser();
+    }
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        method: "patch",
+        url: `http://89.111.174.159:3002/users/me`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(user),
+      };
+
+      await sendRequest(config);
+      await fetchUser();
+      setEditing(false);
+    } catch (error) {
+      console.error("Ошибка при сохранении данных пользователя", error);
+    }
+  };
+
+  const toggleEdit = () => {
+    setEditing(!editing);
+  };
+
+  return (
+    <Box className="user-profile" p="4">
+      {editing ? (
+        <>
+          <Input
+            type="text"
+            value={user.name}
+            onChange={(e) =>
+              setUser((prevUser) => ({ ...prevUser, name: e.target.value }))
+            }
+            mb="2"
+          />
+
+          <Button colorScheme="blue" onClick={handleSave} mr="2">
+            Сохранить
+          </Button>
+        </>
+      ) : (
+        <>
+          <Text fontSize="lg" fontWeight="bold" mb="2">
+            {user.name} {user.surname}
+          </Text>
+          <Button colorScheme="blue" onClick={toggleEdit} mr="2">
+            Редактировать
+          </Button>
+        </>
+      )}
+      <Logout />
+    </Box>
+  );
+}
+
+export default UserProfile;
