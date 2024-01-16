@@ -7,7 +7,7 @@ const generateWorkersPromises = (response, token, sender = false) => {
         const receivingAcademy = request.receiving_academy;
         const workerConfig = {
           method: 'get',
-          url: `http://89.111.174.159:3002/workers/${workerId}?selected_academy=${sender === true ? senderAcademy: receivingAcademy }`,
+          url: `https://3547-45-10-55-124.ngrok-free.app/workers/${workerId}?selected_academy=${sender === true ? senderAcademy: receivingAcademy }`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

@@ -21,7 +21,7 @@ function ViewRequests({ onSetIsAuthenticated }) {
           const selectedAcademy = localStorage.getItem('academy');
           const config = {
             method: 'get',
-            url: `http://89.111.174.159:3002/requests/outcoming/requests?selected_academy=${selectedAcademy}`,
+            url: `https://3547-45-10-55-124.ngrok-free.app/requests/outcoming/requests?selected_academy=${selectedAcademy}`,
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',

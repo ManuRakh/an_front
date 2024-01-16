@@ -9,7 +9,7 @@ function Logout() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `http://89.111.174.159:3002/auth/logout`,
+      url: `https://3547-45-10-55-124.ngrok-free.app/auth/logout`,
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",

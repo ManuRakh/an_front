@@ -21,7 +21,7 @@ const RequestDetail = ({ onSetIsAuthenticated }) => {
 
         const config = {
           method: 'get',
-          url: `http://89.111.174.159:3002/requests/${requestId}?selected_academy=${selectedAcademy}`,
+          url: `https://3547-45-10-55-124.ngrok-free.app/requests/${requestId}?selected_academy=${selectedAcademy}`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

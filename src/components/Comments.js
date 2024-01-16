@@ -39,7 +39,7 @@ const Comments = ({ requestId }) => {
       try {
         const config = {
             method: 'get',
-            url: `http://89.111.174.159:3002/comments/requests/${requestId}`,
+            url: `https://3547-45-10-55-124.ngrok-free.app/comments/requests/${requestId}`,
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ const Comments = ({ requestId }) => {
                 for (const fileId of parsedFiles) {
                     const fileConfig = {
                         method: 'get',
-                        url: `http://89.111.174.159:3002/files/${fileId}`,
+                        url: `https://3547-45-10-55-124.ngrok-free.app/files/${fileId}`,
                         headers: {
                           Authorization: `Bearer ${token}`,
                           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const Comments = ({ requestId }) => {
       if (user_id === comment.user_id) {
         const config = {
           method: 'delete',
-          url: `http://89.111.174.159:3002/comments/${commentId}`,
+          url: `https://3547-45-10-55-124.ngrok-free.app/comments/${commentId}`,
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

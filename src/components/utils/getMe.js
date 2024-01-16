@@ -4,7 +4,7 @@ const getMe = async () => {
     const token = localStorage.getItem('token');
     const config = {
       method: 'get',
-      url: `http://89.111.174.159:3002/users/me`,
+      url: `https://3547-45-10-55-124.ngrok-free.app/users/me`,
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
