@@ -50,7 +50,7 @@ const AddCommentModal = ({ requestId }) => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `https://3547-45-10-55-124.ngrok-free.app/comments`,
+        url: `https://b286-62-89-209-162.ngrok-free.app/comments`,
         headers: { 
           'accept': 'application/json', 
           'Content-Type': 'application/json', 

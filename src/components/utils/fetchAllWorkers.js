@@ -6,7 +6,7 @@ const fetchWorkersFn = async (selectedAcademy) => {
 
         const config = {
           method: 'get',
-          url: `https://3547-45-10-55-124.ngrok-free.app/workers?all=true&selected_academy=${selectedAcademy || currentAcademy}`,
+          url: `https://b286-62-89-209-162.ngrok-free.app/workers?all=true&selected_academy=${selectedAcademy || currentAcademy}`,
           headers: { 
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

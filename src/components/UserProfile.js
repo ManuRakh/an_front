@@ -40,7 +40,7 @@ function UserProfile() {
       const token = localStorage.getItem("token");
       const config = {
         method: "patch",
-        url: `https://3547-45-10-55-124.ngrok-free.app/users/me`,
+        url: `https://b286-62-89-209-162.ngrok-free.app/users/me`,
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
