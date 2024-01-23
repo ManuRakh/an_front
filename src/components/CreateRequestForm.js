@@ -33,7 +33,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
           const token = localStorage.getItem('token');
           const config = {
             method: 'get',
-            url: `https://b286-62-89-209-162.ngrok-free.app/supporting_academies`, // Обратите внимание, что мы убрали базовый URL
+            url: `http://45.87.247.215:3002/supporting_academies`, // Обратите внимание, что мы убрали базовый URL
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
 
     const config = {
         method: 'post',
-        url: `https://b286-62-89-209-162.ngrok-free.app/requests?selected_academy=${selectedAcademy}`, // Обратите внимание на базовый URL
+        url: `http://45.87.247.215:3002/requests?selected_academy=${selectedAcademy}`, // Обратите внимание на базовый URL
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

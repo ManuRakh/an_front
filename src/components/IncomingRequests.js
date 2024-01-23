@@ -19,7 +19,7 @@ function IncomingRequests({ onSetIsAuthenticated }) {
 
           const config = {
             method: 'get',
-            url: `https://b286-62-89-209-162.ngrok-free.app/requests/incoming/requests?selected_academy=${selectedAcademy}`,
+            url: `http://45.87.247.215:3002/requests/incoming/requests?selected_academy=${selectedAcademy}`,
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',

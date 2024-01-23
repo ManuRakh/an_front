@@ -13,7 +13,7 @@ function LoginForm({ onLoginSuccess }) {
 
     try {
       const response = await axios.post(
-        `https://b286-62-89-209-162.ngrok-free.app/auth/login`,
+        `http://45.87.247.215:3002/auth/login`,
         {
           username,
           password,

@@ -28,7 +28,7 @@ const FileUpload = ({ onFileUpload }) => {
 
                 const config = {
                   method: 'post',
-                  url: `https://b286-62-89-209-162.ngrok-free.app/files`,
+                  url: `http://45.87.247.215:3002/files`,
                   headers: { 
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

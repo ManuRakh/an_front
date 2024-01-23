@@ -37,7 +37,7 @@ function Dashboard({ onSetIsAuthenticated }) {
 
         const config = {
           method: 'get',
-          url: `https://b286-62-89-209-162.ngrok-free.app/workers?selected_academy=${currentAcademy}`,
+          url: `http://45.87.247.215:3002/workers?selected_academy=${currentAcademy}`,
           headers: { 
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       const currentAcademy = localStorage.getItem('academy');
       await sendRequest({
         method: 'delete',
-        url: `https://b286-62-89-209-162.ngrok-free.app/workers/${workerId}?selected_academy=${currentAcademy}`,
+        url: `http://45.87.247.215:3002/workers/${workerId}?selected_academy=${currentAcademy}`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -113,7 +113,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       worker.user_id = userId;
       const config = {
         method: 'post',
-        url: `https://b286-62-89-209-162.ngrok-free.app/workers`,
+        url: `http://45.87.247.215:3002/workers`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -141,7 +141,7 @@ function Dashboard({ onSetIsAuthenticated }) {
 
       const config = {
         method: 'post',
-        url: `https://b286-62-89-209-162.ngrok-free.app/users?selected_academy=${currentAcademy}`,
+        url: `http://45.87.247.215:3002/users?selected_academy=${currentAcademy}`,
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
