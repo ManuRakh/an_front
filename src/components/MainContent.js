@@ -6,7 +6,7 @@ function MainContent({ isAuthenticated, handleLoginSuccess }) {
   return (
     <Box
       as="main"
-      backgroundImage="linear-gradient(45deg, #FFB6C1, #87CEEB)"
+      backgroundColor={'#87CEEB'}
       padding="4"
       minHeight="100vh"
       display="flex"
@@ -43,26 +43,26 @@ function MainContent({ isAuthenticated, handleLoginSuccess }) {
         marginTop="4"
       >
         <Box className="feature" mb="8">
-          <Heading as="h2" color="#4CAF50">
+          <Heading as="h2" >
             Обменивайтесь заявками между институтами
           </Heading>
-          <Text color="#777" fontSize="lg">
+          <Text fontSize="lg">
             Передавайте важные сообщения и заявки с легкостью между институтами академии РТ.
           </Text>
         </Box>
         <Box className="feature" mb="8">
-          <Heading as="h2" color="#FFC107">
+          <Heading as="h2" >
             Получайте интерактивные оповещения
           </Heading>
-          <Text color="#777" fontSize="lg">
+          <Text fontSize="lg">
             Будьте в курсе событий! Получайте уведомления посредством SMS/Email с оперативной доставкой.
           </Text>
         </Box>
         <Box className="feature">
-          <Heading as="h2" color="#FF5722">
+          <Heading as="h2">
             Будьте в курсе изменений
           </Heading>
-          <Text color="#777" fontSize="lg">
+          <Text  fontSize="lg">
             Следите за изменениями в ваших заявках и держите руку на пульсе современных технологий.
           </Text>
         </Box>
