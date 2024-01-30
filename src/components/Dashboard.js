@@ -13,16 +13,19 @@ import {
   FormControl,
   FormLabel,
   Select,
-  FormErrorMessage,
+  Text,
+  useToast,
 } from "@chakra-ui/react";
 
 function Dashboard({ onSetIsAuthenticated }) {
+  const toast = useToast();
+
   const [worker, setWorker] = useState({ spec: "", name: "", surname: "" });
   const [workers, setWorkers] = useState([]);
   const [allWorkers, setAllWorkers] = useState([]);
   const [users, setUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState([]);
-
+  const [error, setError] = useState();
   const [user, setUser] = useState({
     name: "",
     phone: "",
@@ -110,8 +113,19 @@ function Dashboard({ onSetIsAuthenticated }) {
         currentWorkers.filter((w) => w.id !== workerId)
       );
       if (workers[0]?.id === workerId) setWorkers([]);
+      setError("");
+      toast({
+        title: "Сотрудник успешно удален!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (error) {
-      console.error("Ошибка при удалении сотрудника", error);
+      setError(error.response.data.error);
+      console.error(
+        "Ошибка при удалении сотрудника",
+        error.response.data.error
+      );
     }
   };
 
@@ -138,8 +152,21 @@ function Dashboard({ onSetIsAuthenticated }) {
         setAllWorkers((currentWorkers) => [...currentWorkers, foundWorker]);
 
       setWorkers([foundWorker]);
+      setError("");
+      toast({
+        title: "Сотрудник успешно создан!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setWorker({
+        name: "",
+        spec: "",
+        surname: "",
+      });
     } catch (error) {
-      console.error("Ошибка при создании воркера", error);
+      setError(error.response.data.error);
+      console.error("Ошибка при создании воркера", error.response.data.error);
     }
   };
 
@@ -161,10 +188,27 @@ function Dashboard({ onSetIsAuthenticated }) {
       };
 
       await sendRequest(config);
+      toast({
+        title: "Пользователь успешно создан!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setUser({
+        name: "",
+        phone: "",
+        telegram: "",
+        role: "",
+        username: "",
+        password: "",
+      });
 
       console.log("User was created successfully");
+      setError("");
     } catch (error) {
-      console.error("Ошибка при создании воркера", error);
+      setError(error.response.data.error);
+
+      console.error("Ошибка при создании воркера", error.response.data.error);
     }
   };
   return (
@@ -189,6 +233,7 @@ function Dashboard({ onSetIsAuthenticated }) {
                 value={worker.spec}
                 onChange={handleChange}
                 placeholder="Должность"
+                isRequired
               />
             </FormControl>
             <FormControl>
@@ -199,6 +244,8 @@ function Dashboard({ onSetIsAuthenticated }) {
                 value={worker.name}
                 onChange={handleChange}
                 placeholder="Имя"
+                isRequired
+                onFocus={() => setError("")}
               />
             </FormControl>
             <FormControl>
@@ -209,8 +256,12 @@ function Dashboard({ onSetIsAuthenticated }) {
                 value={worker.surname}
                 onChange={handleChange}
                 placeholder="Фамилия"
+                isRequired
+                onFocus={() => setError("")}
               />
             </FormControl>
+            {error && <Text color="red.500">{error}</Text>}
+
             <Button type="submit">Создать Работника</Button>
           </form>
         </Box>
@@ -233,6 +284,8 @@ function Dashboard({ onSetIsAuthenticated }) {
                 value={user.name}
                 onChange={handleChangeUser}
                 placeholder="Имя"
+                isRequired
+                onFocus={() => setError("")}
               />
             </FormControl>
             <FormControl>
@@ -242,6 +295,8 @@ function Dashboard({ onSetIsAuthenticated }) {
                 value={user.role}
                 onChange={handleChangeUser}
                 placeholder="Выберите роль"
+                isRequired
+                onFocus={() => setError("")}
               >
                 <option value="админ">Админ</option>
                 <option value="работник">Работник</option>
@@ -255,6 +310,8 @@ function Dashboard({ onSetIsAuthenticated }) {
                 value={user.phone}
                 onChange={handleChangeUser}
                 placeholder="Номер телефона"
+                isRequired
+                onFocus={() => setError("")}
               />
             </FormControl>
             <FormControl>
@@ -265,6 +322,7 @@ function Dashboard({ onSetIsAuthenticated }) {
                 value={user.telegram}
                 onChange={handleChangeUser}
                 placeholder="Telegram"
+                onFocus={() => setError("")}
               />
             </FormControl>
             <FormControl>
@@ -274,7 +332,9 @@ function Dashboard({ onSetIsAuthenticated }) {
                 name="username"
                 value={user.user}
                 onChange={handleChangeUser}
+                isRequired
                 placeholder="Никнейм пользователя,должен быть уникальным"
+                onFocus={() => setError("")}
               />
             </FormControl>
             <FormControl>
@@ -284,9 +344,12 @@ function Dashboard({ onSetIsAuthenticated }) {
                 name="password"
                 value={user.password}
                 onChange={handleChangeUser}
+                isRequired
                 placeholder="Пароль должен содержать минимум 8 букв и цифр "
+                onFocus={() => setError("")}
               />
             </FormControl>
+            {error && <Text color="red.500">{error}</Text>}
 
             <Button type="submit">Создать Пользователя</Button>
           </form>

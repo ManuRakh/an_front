@@ -39,7 +39,6 @@ function LoginForm({ onLoginSuccess }) {
   return (
     <Center>
       <Box as="form" onSubmit={handleSubmit} w="300px">
-        {error && <Text color="red.500">{error}</Text>}
         <Input
           type="text"
           value={username}
@@ -65,6 +64,8 @@ function LoginForm({ onLoginSuccess }) {
           <option value="physics">Академия Физики</option>
           <option value="math">Академия Математики</option>
         </Select>
+        {error && <Text color="red.500">{error}</Text>}
+
         <Button type="submit" colorScheme="blue">
           Войти
         </Button>
