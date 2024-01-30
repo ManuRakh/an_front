@@ -1,10 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "../css/Dashboard.css";
-import WorkerList from "./WorkerList.js";
-import { sendRequest } from "../utils/sendRequest.js";
-import fetchWorkersFn from "./utils/fetchAllWorkers.js";
-import getMe from "./utils/getMe.js";
 import {
   Box,
   Heading,
@@ -15,7 +9,14 @@ import {
   Select,
   Text,
   useToast,
+  InputGroup,
+  InputLeftAddon,
 } from "@chakra-ui/react";
+import WorkerList from "./WorkerList";
+import { sendRequest } from "../utils/sendRequest";
+import fetchWorkersFn from "./utils/fetchAllWorkers";
+import getMe from "./utils/getMe";
+import "../css/Dashboard.css";
 
 function Dashboard({ onSetIsAuthenticated }) {
   const toast = useToast();
@@ -34,6 +35,10 @@ function Dashboard({ onSetIsAuthenticated }) {
     username: "",
     password: "",
   });
+
+  const [isCreatingWorker, setIsCreatingWorker] = useState(false);
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
+
   const handleChange = (e) => {
     setWorker({ ...worker, [e.target.name]: e.target.value });
   };
@@ -43,57 +48,40 @@ function Dashboard({ onSetIsAuthenticated }) {
   };
 
   useEffect(() => {
-    const fetchWorkers = async () => {
+    const fetchInitialData = async () => {
       try {
         const token = localStorage.getItem("token");
         const currentAcademy = localStorage.getItem("academy");
 
         const config = {
-          method: "get",
-          url: `http://45.87.247.215:3002/workers?selected_academy=${currentAcademy}`,
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         };
 
-        const response = (await sendRequest(config))?.filter(
-          (res) => res !== null
-        );
+        const [workersResponse, allWorkersResponse, userResponse] =
+          await Promise.all([
+            sendRequest({
+              ...config,
+              method: "get",
+              url: `http://45.87.247.215:3002/workers?selected_academy=${currentAcademy}`,
+            }),
+            fetchWorkersFn(),
+            getMe(),
+          ]);
 
-        setWorkers(response);
+        setWorkers(workersResponse.filter((res) => res !== null));
+        setAllWorkers(allWorkersResponse);
+        setIsAdmin(userResponse.role === "admin");
       } catch (error) {
-        console.error("Ошибка при получении данных о сотрудниках", error);
-        const errMsg = error.response.data.error;
+        console.error("Ошибка при загрузке данных:", error);
+        const errMsg = error.response?.data?.error;
         if (errMsg === "Not authenticated") onSetIsAuthenticated(false);
       }
     };
 
-    const fetchAllWorkers = async () => {
-      try {
-        const response = await fetchWorkersFn();
-
-        setAllWorkers(response);
-      } catch (error) {
-        console.error("Ошибка при получении данных о сотрудниках", error);
-        const errMsg = error.response.data.error;
-        if (errMsg === "Not authenticated") onSetIsAuthenticated(false);
-      }
-    };
-
-    const fetchUsers = async () => {
-      try {
-        const response = await getMe();
-
-        setIsAdmin(response.role === "admin");
-      } catch (error) {
-        console.error("Ошибка при получении данных о пользователях", error);
-      }
-    };
-
-    fetchWorkers();
-    fetchAllWorkers();
-    fetchUsers();
+    fetchInitialData();
   }, []);
 
   const handleDeleteWorker = async (workerId) => {
@@ -112,6 +100,7 @@ function Dashboard({ onSetIsAuthenticated }) {
       setAllWorkers((currentWorkers) =>
         currentWorkers.filter((w) => w.id !== workerId)
       );
+
       if (workers[0]?.id === workerId) setWorkers([]);
       setError("");
       toast({
@@ -121,16 +110,20 @@ function Dashboard({ onSetIsAuthenticated }) {
         isClosable: true,
       });
     } catch (error) {
-      setError(error.response.data.error);
+      setError(
+        error.response?.data?.error ||
+          "Произошла ошибка при удалении сотрудника"
+      );
       console.error(
         "Ошибка при удалении сотрудника",
-        error.response.data.error
+        error.response?.data?.error || error
       );
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsCreatingWorker(true);
 
     try {
       const token = localStorage.getItem("token");
@@ -165,13 +158,22 @@ function Dashboard({ onSetIsAuthenticated }) {
         surname: "",
       });
     } catch (error) {
-      setError(error.response.data.error);
-      console.error("Ошибка при создании воркера", error.response.data.error);
+      setError(
+        error.response?.data?.error ||
+          "Произошла ошибка при создании сотрудника"
+      );
+      console.error(
+        "Ошибка при создании воркера",
+        error.response?.data?.error || error
+      );
+    } finally {
+      setIsCreatingWorker(false);
     }
   };
 
   const handleSubmitUser = async (e) => {
     e.preventDefault();
+    setIsCreatingUser(true);
 
     try {
       const token = localStorage.getItem("token");
@@ -206,11 +208,19 @@ function Dashboard({ onSetIsAuthenticated }) {
       console.log("User was created successfully");
       setError("");
     } catch (error) {
-      setError(error.response.data.error);
-
-      console.error("Ошибка при создании воркера", error.response.data.error);
+      setError(
+        error.response?.data?.error ||
+          "Произошла ошибка при создании пользователя"
+      );
+      console.error(
+        "Ошибка при создании воркера",
+        error.response?.data?.error || error
+      );
+    } finally {
+      setIsCreatingUser(false);
     }
   };
+
   return (
     <Box className="dashboard-container">
       <Heading as="h5">
@@ -234,6 +244,7 @@ function Dashboard({ onSetIsAuthenticated }) {
                 onChange={handleChange}
                 placeholder="Должность"
                 isRequired
+                boxShadow="md"
               />
             </FormControl>
             <FormControl>
@@ -246,6 +257,7 @@ function Dashboard({ onSetIsAuthenticated }) {
                 placeholder="Имя"
                 isRequired
                 onFocus={() => setError("")}
+                boxShadow="md"
               />
             </FormControl>
             <FormControl>
@@ -258,11 +270,20 @@ function Dashboard({ onSetIsAuthenticated }) {
                 placeholder="Фамилия"
                 isRequired
                 onFocus={() => setError("")}
+                boxShadow="md"
               />
             </FormControl>
             {error && <Text color="red.500">{error}</Text>}
 
-            <Button type="submit">Создать Работника</Button>
+            <Button
+              type="submit"
+              isLoading={isCreatingWorker}
+              loadingText="Создание..."
+              _hover={{ bg: "blue.500" }}
+              boxShadow="md"
+            >
+              Создать Работника
+            </Button>
           </form>
         </Box>
       )}
@@ -286,6 +307,7 @@ function Dashboard({ onSetIsAuthenticated }) {
                 placeholder="Имя"
                 isRequired
                 onFocus={() => setError("")}
+                boxShadow="md"
               />
             </FormControl>
             <FormControl>
@@ -294,9 +316,9 @@ function Dashboard({ onSetIsAuthenticated }) {
                 name="role"
                 value={user.role}
                 onChange={handleChangeUser}
-                placeholder="Выберите роль"
                 isRequired
                 onFocus={() => setError("")}
+                boxShadow="md"
               >
                 <option value="админ">Админ</option>
                 <option value="работник">Работник</option>
@@ -304,15 +326,19 @@ function Dashboard({ onSetIsAuthenticated }) {
             </FormControl>
             <FormControl>
               <FormLabel>Номер телефона</FormLabel>
-              <Input
-                type="phone"
-                name="phone"
-                value={user.phone}
-                onChange={handleChangeUser}
-                placeholder="Номер телефона"
-                isRequired
-                onFocus={() => setError("")}
-              />
+              <InputGroup alignItems={"center"}>
+                <InputLeftAddon boxShadow="md">+992</InputLeftAddon>
+                <Input
+                  type="phone"
+                  name="phone"
+                  boxShadow="md"
+                  value={user.phone}
+                  onChange={handleChangeUser}
+                  placeholder="Номер телефона"
+                  isRequired
+                  onFocus={() => setError("")}
+                />
+              </InputGroup>
             </FormControl>
             <FormControl>
               <FormLabel>Телеграм(если есть)</FormLabel>
@@ -323,6 +349,7 @@ function Dashboard({ onSetIsAuthenticated }) {
                 onChange={handleChangeUser}
                 placeholder="Telegram"
                 onFocus={() => setError("")}
+                boxShadow="md"
               />
             </FormControl>
             <FormControl>
@@ -335,6 +362,7 @@ function Dashboard({ onSetIsAuthenticated }) {
                 isRequired
                 placeholder="Никнейм пользователя,должен быть уникальным"
                 onFocus={() => setError("")}
+                boxShadow="md"
               />
             </FormControl>
             <FormControl>
@@ -347,11 +375,20 @@ function Dashboard({ onSetIsAuthenticated }) {
                 isRequired
                 placeholder="Пароль должен содержать минимум 8 букв и цифр "
                 onFocus={() => setError("")}
+                boxShadow="md"
               />
             </FormControl>
             {error && <Text color="red.500">{error}</Text>}
 
-            <Button type="submit">Создать Пользователя</Button>
+            <Button
+              type="submit"
+              isLoading={isCreatingUser}
+              loadingText="Создание..."
+              _hover={{ bg: "blue.500" }}
+              boxShadow="md"
+            >
+              Создать Пользователя
+            </Button>
           </form>
         </Box>
       )}

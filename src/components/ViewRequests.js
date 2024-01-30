@@ -85,8 +85,13 @@ function ViewRequests({ onSetIsAuthenticated }) {
   }, []);
 
   return (
-    <Box p={4} mt={4} className="incoming-requests-container">
-      <Text fontSize="2xl" fontWeight="bold" mb={4}>
+    <Box
+      p={4}
+      mt={4}
+      className="incoming-requests-container"
+      bgGradient="linear(to-r, cyan.400, blue.500)"
+    >
+      <Text fontSize="2xl" fontWeight="bold" mb={4} color="white">
         Отправленные заявки
       </Text>
       {isLoading && <Spinner size="xl" />}
@@ -99,13 +104,21 @@ function ViewRequests({ onSetIsAuthenticated }) {
               align="stretch"
               className={`request-column request-column-${status}`}
               flex={{ base: 1, md: 0.25 }}
-              boxShadow="md"
+              boxShadow="lg"
               p={4}
               borderRadius="md"
               bg="white"
               mb={4}
+              _hover={{ boxShadow: "xl", transform: "scale(1.01)" }}
+              transition="all 0.3s"
             >
-              <Text fontSize="lg" fontWeight="semibold" mb={2} textAlign={'center'}>
+              <Text
+                fontSize="lg"
+                fontWeight="semibold"
+                mb={2}
+                textAlign={"center"}
+                color="gray.800"
+              >
                 {status.charAt(0).toUpperCase() + status.slice(1)}
               </Text>
               {(groupedRequests[status] || []).map((request) => (
@@ -151,6 +164,7 @@ function ViewRequests({ onSetIsAuthenticated }) {
                     to={`/incoming-requests/${request.id}`}
                     color="teal.500"
                     mt={2}
+                    _hover={{ textDecoration: "underline" }}
                   >
                     Открыть карточку заявки
                   </ChakraLink>

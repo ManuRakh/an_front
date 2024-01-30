@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { sendRequest } from "../utils/sendRequest";
 import "../css/RequestForm.css";
 import fetchWorkersFn from "./utils/fetchAllWorkers";
@@ -21,7 +20,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
   const [workers, setWorkers] = useState([]);
   const [selectedWorker, setSelectedWorker] = useState("");
   const [description, setDescription] = useState("");
-  const [isRequestSent, setIsRequestSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isMessageVisible, setIsMessageVisible] = useState(false);
   const [messageText, setMessageText] = useState("");
@@ -39,6 +38,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
   useEffect(() => {
     const fetchAcademies = async () => {
       try {
+        setIsLoading(true);
         const token = localStorage.getItem("token");
         const config = {
           method: "get",
@@ -63,6 +63,8 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
         if (errMsg === "Not authenticated") {
           return onSetIsAuthenticated(false);
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -73,6 +75,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
     if (selectedAcademy) {
       const fetchWorkers = async () => {
         try {
+          setIsLoading(true);
           const response = await fetchWorkersFn(selectedAcademy);
 
           setWorkers(response);
@@ -83,6 +86,8 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
           if (errMsg === "Not authenticated") {
             onSetIsAuthenticated(false);
           }
+        } finally {
+          setIsLoading(false);
         }
       };
 
@@ -93,6 +98,7 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setIsLoading(true);
       const foundWorker =
         typeof selectedWorker === "string"
           ? workers.find((worker) => worker.id === selectedWorker)
@@ -148,6 +154,8 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
       if (errMsg === "Not authenticated") {
         return onSetIsAuthenticated(false);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -189,7 +197,14 @@ function CreateRequestForm({ onSetIsAuthenticated }) {
               rows="4"
             />
           </FormControl>
-          <Button type="submit" colorScheme="teal" mt={4}>
+          <Button
+            type="submit"
+            colorScheme="teal"
+            mt={4}
+            isLoading={isLoading}
+            loadingText="Отправка..."
+            spinnerPlacement="end"
+          >
             Отправить заявку
           </Button>
         </form>
